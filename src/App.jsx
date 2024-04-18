@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import axios from 'axios'
+import { Container, Grid } from '@mui/material';
+import CharacterCard from './components/CharacterCard';
 
 function App() {
   const [characters, setCharacters] = useState([])
@@ -11,29 +13,27 @@ function App() {
     const getCharacters = async (url) => {
       const { data } = await axios.get(url);
       setCharacters(data.data.results)
-      console.log(data.data.results)
       setLoading(false)
     }
     getCharacters(URL)
   }, [])
 
   return (
-    <div>
+    <Container>
       {
         loading ?
           <p>Loading...</p> :
-          <div>
+          <Grid container direction={"row"} spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 8, md: 12 }}>
             {
               characters?.map((character) => (
-                <div>
-                  <img key={character.id} src={`${character?.thumbnail.path}.${character?.thumbnail.extension}`} alt={character?.name} />
-                  <p>{character?.name}</p>
-                </div>
+                <Grid item xs={2} sm={4} md={4} key={character.id}>
+                  <CharacterCard character={character} />
+                </Grid>
               ))
             }
-          </div>
+          </Grid>
       }
-    </div>
+    </Container>
   )
 }
 
